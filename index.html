@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação de Farmacologia</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #4a148c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Estilos da tela de Informações do Aluno */
+        #student-info-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        #student-info-form input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        #start-btn {
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #673ab7;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #start-btn:hover {
+            background-color: #512da8;
+        }
+
+        /* Estilos do Quiz */
+        #quiz-wrapper {
+            display: none; /* Começa escondido */
+        }
+
+        #quiz-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #student-display, #score-tracker {
+            background-color: #f4f4f9;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        #score-tracker {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+        
+        /* Linha do Tempo */
+        #timeline-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+        .timeline-item {
+            width: 20px;
+            height: 20px;
+            background-color: #e0e0e0; /* Cinza - Não respondido */
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: 0.7em;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        .timeline-item.correct {
+            background-color: #4CAF50; /* Verde - Correto */
+        }
+        .timeline-item.incorrect {
+            background-color: #F44336; /* Vermelho - Incorreto */
+        }
+
+        .question-block {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .question-block p {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background-color: #f9f9f9;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-left 0.3s;
+            border: 1px solid #ddd;
+            border-left: 5px solid #ddd;
+        }
+        .options label:hover {
+            background-color: #e9e3f5;
+        }
+        .options input[type="radio"] {
+            display: none;
+        }
+        .options input[type="radio"]:checked + span {
+            font-weight: bold;
+        }
+        .options input[type="radio"]:checked + span::before {
+             content: '✓ ';
+             color: #4a148c;
+        }
+        .options input[type="radio"]:checked ~ label {
+            border-left: 5px solid #673ab7;
+        }
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        #submit-btn:hover {
+            background-color: #388E3C;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9e3f5;
+            border-radius: 5px;
+            text-align: center;
+        }
+         #whatsapp-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            color: #fff;
+            background-color: #25D366;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="student-info">
+            <h1>Avaliação de Farmacologia</h1>
+            <p>Por favor, preencha seus dados para iniciar a avaliação.</p>
+            <form id="student-info-form">
+                <input type="text" id="student-name" placeholder="Digite seu nome completo" required>
+                <input type="text" id="student-id" placeholder="Digite sua matrícula" required>
+                <button type="button" id="start-btn">Iniciar Avaliação</button>
+            </form>
+        </div>
+
+        <div id="quiz-wrapper">
+             <div id="quiz-header">
+                <div id="student-display"></div>
+                <div id="score-tracker">Acertos: 0 / 30</div>
+             </div>
+             <div id="timeline-container">
+                 </div>
+             <form id="quiz-form">
+                </form>
+            <button id="submit-btn">Finalizar e Enviar</button>
+            <div id="results" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "1. A hipertensão é definida como:", options: ["PAS ≥ 120 mmHg e PAD ≥ 80 mmHg", "PAS > 140 mmHg e/ou PAD > 90 mmHg", "PAS > 130 mmHg e PAD > 85 mmHg", "PAS ≥ 160 mmHg e PAD ≥ 100 mmHg"], answer: "PAS > 140 mmHg e/ou PAD > 90 mmHg" },
+            { question: "2. Qual é a principal alteração fisiológica responsável pela hipertensão?", options: ["Diminuição do volume plasmático", "Aumento da resistência vascular periférica", "Aumento do débito cardíaco", "Redução da contratilidade miocárdica"], answer: "Aumento da resistência vascular periférica" },
+            { question: "3. Qual das afirmativas sobre a hipertensão é verdadeira?", options: ["Sempre tem uma causa conhecida", "Acomete apenas idosos", "É fator de risco para insuficiência renal e cardíaca", "Raramente leva a complicação se não tratada"], answer: "É fator de risco para insuficiência renal e cardíaca" },
+            { question: "4. A adesão ao tratamento anti-hipertensivo é frequentemente baixa porque:", options: ["Os medicamentos são caros", "Os pacientes sentem dor intensa", "A hipertensão é sintomática", "O tratamento visa prevenir complicações futuras, não sintomas presentes"], answer: "O tratamento visa prevenir complicações futuras, não sintomas presentes" },
+            { question: "5. Um efeito adverso dos β-bloqueadores que pode comprometer a adesão do paciente é:", options: ["Hiperglicemia", "Hipotireoidismo", "Disfunção sexual", "Constipação"], answer: "Disfunção sexual" },
+            { question: "6. Qual o principal mecanismo de ação dos diuréticos no tratamento inicial da hipertensão?", options: ["Inibição da aldosterona", "Vasodilatação reflexa", "Redução do volume extracelular", "Aumento da contratilidade cardíaca"], answer: "Redução do volume extracelular" },
+            { question: "7. Sobre os diuréticos tiazídicos, é incorreto afirmar:", options: ["São úteis em pacientes com função renal preservada", "Podem causar hipopotassemia", "Diminuem o cálcio urinário", "São eficazes mesmo em pacientes com VFG < 30 mL/min"], answer: "São eficazes mesmo em pacientes com VFG < 30 mL/min" },
+            { question: "8. Os diuréticos de alça são preferidos em:", options: ["Hipertensão sem comorbidades", "Pacientes com edema e insuficiência cardíaca", "Hipertensão leve", "Hipertensão gestacional"], answer: "Pacientes com edema e insuficiência cardíaca" },
+            { question: "9. Qual o efeito adverso que difere os diuréticos de alça dos tiazídicos?", options: ["Hipopotassemia", "Hiperuricemia", "Aumento da calciúria", "Hiperglicemia"], answer: "Aumento da calciúria" },
+            { question: "10. Qual das opções abaixo é um diurético poupador de potássio?", options: ["Furosemida", "Hidroclorotiazida", "Espironolactona", "Clortalidona"], answer: "Espironolactona" },
+            { question: "11. Qual classe de fármacos reduz a pós-carga por bloqueio de receptores α1?", options: ["β-bloqueadores", "Antagonistas do cálcio", "Bloqueadores α1-adrenérgicos", "Diuréticos"], answer: "Bloqueadores α1-adrenérgicos" },
+            { question: "12. A clonidina é um agente anti-hipertensivo que atua:", options: ["Inibindo a ECA", "Aumentando a liberação de noradrenalina", "Como agonista α2-central", "Bloqueando canais de cálcio"], answer: "Como agonista α2-central" },
+            { question: "13. Qual o principal efeito dos IECAs?", options: ["Inibição da secreção de aldosterona", "Estímulo da renina", "Inibição da conversão de angiotensina I em angiotensina II", "Estímulo da produção de angiotensina II"], answer: "Inibição da conversão de angiotensina I em angiotensina II" },
+            { question: "14. Um efeito adverso comum dos IECAs é:", options: ["Hipocalemia", "Tosse seca", "Bradicardia", "Constipação"], answer: "Tosse seca" },
+            { question: "15. Os BRA (bloqueadores dos receptores da angiotensina II) são indicados para:", options: ["Pacientes que não toleram os IECAs", "Gestantes", "Crianças com hipertensão", "Uso em crises hipertensivas agudas"], answer: "Pacientes que não toleram os IECAs" },
+            { question: "16. Qual é a contraindicação clássica do uso de IECAs e BRAs?", options: ["Hiperglicemia", "Hipocalcemia", "Gravidez", "Hipotensão ortostática leve"], answer: "Gravidez" },
+            { question: "17. Qual o mecanismo dos bloqueadores dos canais de cálcio?", options: ["Inibição da aldosterona", "Vasodilatação por redução do influxo de cálcio nos miócitos", "Aumento da frequência cardíaca", "Inibição dos receptores β1"], answer: "Vasodilatação por redução do influxo de cálcio nos miócitos" },
+            { question: "18. Qual dos seguintes bloqueadores dos canais de cálcio atua preferencialmente sobre o coração?", options: ["Nifedipina", "Anlodipino", "Verapamil", "Amlodipina"], answer: "Verapamil" },
+            { question: "19. Um efeito adverso comum dos antagonistas do cálcio diidropiridínicos é:", options: ["Bradicardia", "Edema periférico", "Constipação", "Hipocalemia"], answer: "Edema periférico" },
+            { question: "20. Qual a principal indicação clínica dos β-bloqueadores na hipertensão?", options: ["Redução do débito cardíaco", "Estímulo da vasoconstrição", "Bloqueio da aldosterona", "Aumento do volume plasmático"], answer: "Redução do débito cardíaco" },
+            { question: "21. Em qual condição os β-bloqueadores são particularmente úteis?", options: ["Diabetes mellitus", "Asma", "Insuficiência cardíaca com fração de ejeção reduzida", "Doença renal crônica"], answer: "Insuficiência cardíaca com fração de ejeção reduzida" },
+            { question: "22. Qual medicamento anti-hipertensivo deve ser evitado em pacientes com asma?", options: ["Verapamil", "Espironolactona", "Propranolol", "Losartana"], answer: "Propranolol" },
+            { question: "23. Os vasodilatadores diretos como hidralazina e minoxidil atuam principalmente sobre:", options: ["Arteríolas", "Vênulas", "Coração", "SNC"], answer: "Arteríolas" },
+            { question: "24. A hidralazina pode causar um efeito adverso imunológico conhecido como:", options: ["Lúpus-like", "Eritema multiforme", "Síndrome de Stevens-Johnson", "Hepatite autoimune"], answer: "Lúpus-like" },
+            { question: "25. Os nitratos são usados em:", options: ["Hipertensão pulmonar", "Angina de peito", "Hipertensão intracraniana", "Asma"], answer: "Angina de peito" },
+            { question: "26. Qual combinação de fármacos anti-hipertensivos é geralmente segura?", options: ["IECAs + BRAs", "Diuréticos + IECAs", "β-bloqueadores + bloqueadores dos canais de cálcio cardíacos", "BRA + bloqueador α1"], answer: "Diuréticos + IECAs" },
+            { question: "27. Qual das seguintes drogas anti-hipertensivas deve ser evitada na gravidez?", options: ["Metildopa", "Nifedipina", "Losartana", "Hidralazina"], answer: "Losartana" },
+            { question: "28. A metildopa é segura para uso em:", options: ["Idosos com insuficiência renal", "Crianças", "Gestantes", "Pacientes com doença hepática"], answer: "Gestantes" },
+            { question: "29. A hipertensão secundária pode ser causada por:", options: ["Disfunção tireoidiana", "Uso crônico de estatinas", "Ingestão de potássio", "Exercício físico regular"], answer: "Disfunção tireoidiana" },
+            { question: "30. Qual fármaco tem início de ação mais rápido em emergências hipertensivas?", options: ["Enalapril", "Hidralazina IV", "Espironolactona", "Atenolol"], answer: "Hidralazina IV" }
+        ];
+
+        // Elementos da DOM
+        const studentInfoDiv = document.getElementById('student-info');
+        const quizWrapperDiv = document.getElementById('quiz-wrapper');
+        const startBtn = document.getElementById('start-btn');
+        const studentNameInput = document.getElementById('student-name');
+        const studentIdInput = document.getElementById('student-id');
+        
+        const quizForm = document.getElementById('quiz-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultsContainer = document.getElementById('results');
+        const timelineContainer = document.getElementById('timeline-container');
+        const scoreTracker = document.getElementById('score-tracker');
+        const studentDisplay = document.getElementById('student-display');
+
+        const teacherPhoneNumber = '5584994420139'; // Número com código do país
+        let studentName = '';
+        let studentId = '';
+        let score = 0;
+
+        // Função para iniciar o quiz
+        startBtn.addEventListener('click', () => {
+            studentName = studentNameInput.value.trim();
+            studentId = studentIdInput.value.trim();
+
+            if (studentName === '' || studentId === '') {
+                alert('Por favor, preencha seu nome e matrícula para continuar.');
+                return;
+            }
+
+            studentInfoDiv.style.display = 'none';
+            quizWrapperDiv.style.display = 'block';
+            studentDisplay.innerText = studentName;
+            
+            createTimeline();
+            loadQuiz();
+        });
+
+        // Função para criar a linha do tempo
+        function createTimeline() {
+            quizData.forEach((_, index) => {
+                const item = document.createElement('div');
+                item.classList.add('timeline-item');
+                item.id = `timeline-item-${index}`;
+                item.textContent = index + 1;
+                timelineContainer.appendChild(item);
+            });
+        }
+
+        // Função para carregar as questões na página
+        function loadQuiz() {
+            let quizHTML = '';
+            quizData.forEach((item, index) => {
+                quizHTML += `
+                    <div class="question-block" id="q${index}">
+                        <p>${item.question}</p>
+                        <div class="options">
+                `;
+                item.options.forEach(option => {
+                    quizHTML += `
+                        <label>
+                            <input type="radio" name="question${index}" value="${option}">
+                            <span>${option}</span>
+                        </label>
+                    `;
+                });
+                quizHTML += `</div></div>`;
+            });
+            quizForm.innerHTML = quizHTML;
+
+            // Adiciona um 'escutador' de eventos para todas as respostas
+            quizForm.addEventListener('change', (event) => {
+                if (event.target.type === 'radio') {
+                    handleAnswer(event.target);
+                }
+            });
+        }
+
+        // Função para lidar com a resposta em tempo real
+        function handleAnswer(radioInput) {
+            const questionIndex = parseInt(radioInput.name.replace('question', ''));
+            const selectedValue = radioInput.value;
+            const correctAnswer = quizData[questionIndex].answer;
+            const timelineItem = document.getElementById(`timeline-item-${questionIndex}`);
+
+            timelineItem.classList.remove('correct', 'incorrect'); // Limpa classes anteriores
+
+            if (selectedValue === correctAnswer) {
+                timelineItem.classList.add('correct');
+            } else {
+                timelineItem.classList.add('incorrect');
+            }
+
+            updateScore();
+        }
+        
+        // Função para atualizar o placar
+        function updateScore() {
+            const correctAnswers = document.querySelectorAll('.timeline-item.correct').length;
+            score = correctAnswers;
+            scoreTracker.innerText = `Acertos: ${score} / ${quizData.length}`;
+        }
+
+        // Função para finalizar e enviar
+        submitBtn.addEventListener('click', () => {
+            const totalQuestions = quizData.length;
+            const answeredQuestions = document.querySelectorAll('.timeline-item.correct, .timeline-item.incorrect').length;
+            
+            if (answeredQuestions < totalQuestions) {
+                if (!confirm(`Você ainda não respondeu ${totalQuestions - answeredQuestions} questão(ões). Deseja finalizar mesmo assim?`)) {
+                    return;
+                }
+            }
+            
+            // Exibir resultados
+            const percentage = ((score / totalQuestions) * 100).toFixed(1);
+            resultsContainer.innerHTML = `
+                <h2>Avaliação Finalizada!</h2>
+                <p>Aluno(a): <strong>${studentName}</strong></p>
+                <p>Matrícula: <strong>${studentId}</strong></p>
+                <p>Você acertou <strong>${score}</strong> de <strong>${totalQuestions}</strong> questões.</p>
+                <p>Sua pontuação final é <strong>${percentage}%</strong>.</p>
+                <a id="whatsapp-btn" href="#" target="_blank">Enviar Resultado para o Professor</a>
+            `;
+            resultsContainer.style.display = 'block';
+            submitBtn.style.display = 'none'; // Esconde o botão de finalizar
+
+            // Gerar link do WhatsApp
+            const message = `*Avaliação de Farmacologia Concluída*\n\n*Aluno(a):* ${studentName}\n*Matrícula:* ${studentId}\n*Acertos:* ${score} de ${totalQuestions}\n*Pontuação:* ${percentage}%`;
+            const whatsappURL = `https://api.whatsapp.com/send?phone=${teacherPhoneNumber}&text=${encodeURIComponent(message)}`;
+            
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            whatsappBtn.href = whatsappURL;
+
+            // Rolar para os resultados
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+
+    </script>
+
+</body>
+</html>

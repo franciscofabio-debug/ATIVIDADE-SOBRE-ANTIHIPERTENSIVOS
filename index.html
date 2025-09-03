@@ -5,32 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avaliação de Farmacologia</title>
     <style>
+        :root {
+            --primary-color: #4a148c;
+            --light-primary: #e9e3f5;
+            --secondary-color: #673ab7;
+            --correct-color: #2e7d32;
+            --incorrect-color: #c62828;
+            --neutral-color: #e0e0e0;
+            --background-color: #f0f2f5;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f0f2f5;
+            background-color: var(--background-color);
             color: #333;
             margin: 0;
-            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px 0;
         }
-        .container {
+        .app-container {
             width: 100%;
             max-width: 800px;
             background-color: #fff;
-            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        h1 {
-            color: #4a148c;
-            text-align: center;
-            margin-bottom: 30px;
+
+        /* Cabeçalho */
+        .app-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .app-header img {
+            height: 40px;
+        }
+        .app-header h1 {
+            margin: 0;
+            font-size: 1.5em;
         }
         
-        /* Estilos da tela de Informações do Aluno */
+        .content-padding {
+            padding: 30px;
+        }
+
+        /* Tela de Informações do Aluno */
         #student-info-form {
             display: flex;
             flex-direction: column;
@@ -47,153 +73,116 @@
             font-size: 1.1em;
             font-weight: bold;
             color: #fff;
-            background-color: #673ab7;
+            background-color: var(--secondary-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         #start-btn:hover {
-            background-color: #512da8;
+            opacity: 0.9;
         }
 
-        /* Estilos do Quiz */
+        /* Tela do Quiz */
         #quiz-wrapper {
-            display: none; /* Começa escondido */
+            display: none;
         }
 
-        #quiz-header {
+        #status-bar {
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 10px;
         }
         #student-display, #score-tracker {
             background-color: #f4f4f9;
             padding: 8px 12px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        #score-tracker {
-            background-color: #e3f2fd;
-            color: #0d47a1;
-        }
-        
-        /* Linha do Tempo */
-        #timeline-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 25px;
-            justify-content: center;
-        }
-        .timeline-item {
-            width: 20px;
-            height: 20px;
-            background-color: #e0e0e0; /* Cinza - Não respondido */
-            border-radius: 4px;
-            transition: background-color 0.3s;
-            font-size: 0.7em;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-        }
-        .timeline-item.correct {
-            background-color: #4CAF50; /* Verde - Correto */
-        }
-        .timeline-item.incorrect {
-            background-color: #F44336; /* Vermelho - Incorreto */
+            border-radius: 20px;
+            font-weight: 500;
         }
 
-        .question-block {
-            margin-bottom: 25px;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 8px;
+        #timeline-container {
+            display: flex; flex-wrap: wrap; gap: 5px;
+            margin-bottom: 25px; justify-content: center;
         }
-        .question-block p {
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-top: 0;
-            margin-bottom: 15px;
+        .timeline-item {
+            width: 22px; height: 8px;
+            background-color: var(--neutral-color);
+            border-radius: 4px; transition: background-color 0.3s;
+        }
+        .timeline-item.correct { background-color: var(--correct-color); }
+        .timeline-item.incorrect { background-color: var(--incorrect-color); }
+        .timeline-item.current {
+            transform: scale(1.3);
+            box-shadow: 0 0 8px rgba(74, 20, 140, 0.5);
+        }
+
+        #question-container { min-height: 250px; }
+        #question-text {
+            font-size: 1.2em; font-weight: bold;
+            margin-bottom: 20px; color: var(--primary-color);
         }
         .options label {
-            display: block;
-            background-color: #f9f9f9;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, border-left 0.3s;
-            border: 1px solid #ddd;
-            border-left: 5px solid #ddd;
+            display: block; background-color: #f9f9f9;
+            padding: 12px 15px; margin-bottom: 10px;
+            border-radius: 8px; cursor: pointer;
+            transition: all 0.2s; border: 1px solid #ddd;
         }
-        .options label:hover {
-            background-color: #e9e3f5;
+        .options label:hover { background-color: var(--light-primary); }
+        .options input[type="radio"] { display: none; }
+        
+        /* Estilos de Resposta */
+        .options.answered label { cursor: not-allowed; opacity: 0.7; }
+        .options.answered label:hover { background-color: #f9f9f9; }
+        .options.answered label.correct-answer {
+            background-color: #e8f5e9; border-color: var(--correct-color);
+            color: var(--correct-color); font-weight: bold; opacity: 1;
         }
-        .options input[type="radio"] {
-            display: none;
+        .options.answered label.wrong-answer {
+            background-color: #ffebee; border-color: var(--incorrect-color);
+            color: var(--incorrect-color); font-weight: bold; opacity: 1;
         }
-        .options input[type="radio"]:checked + span {
-            font-weight: bold;
+
+        #feedback-area {
+            margin-top: 20px; padding: 15px; border-radius: 8px;
+            font-weight: 500; display: none;
         }
-        .options input[type="radio"]:checked + span::before {
-             content: '✓ ';
-             color: #4a148c;
+        #feedback-area.correct { background-color: #e8f5e9; color: var(--correct-color); }
+        #feedback-area.incorrect { background-color: #ffebee; color: var(--incorrect-color); }
+
+        #navigation {
+            margin-top: 30px; border-top: 1px solid #eee;
+            padding-top: 20px; display: flex; justify-content: space-between;
         }
-        .options input[type="radio"]:checked ~ label {
-            border-left: 5px solid #673ab7;
+        .nav-btn {
+            padding: 12px 25px; font-size: 1em; font-weight: bold;
+            color: #fff; background-color: var(--secondary-color);
+            border: none; border-radius: 5px; cursor: pointer;
         }
-        #submit-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #fff;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: background-color 0.3s;
-        }
-        #submit-btn:hover {
-            background-color: #388E3C;
-        }
+        .nav-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* Tela Final */
         #results {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #e9e3f5;
-            border-radius: 5px;
             text-align: center;
         }
          #whatsapp-btn {
-            display: inline-block;
-            padding: 12px 25px;
-            font-size: 1.1em;
-            color: #fff;
-            background-color: #25D366;
-            border-radius: 25px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        #whatsapp-btn:hover {
-            background-color: #128C7E;
+            display: inline-block; padding: 12px 25px; font-size: 1.1em;
+            color: #fff; background-color: #25D366; border-radius: 25px;
+            text-decoration: none; margin-top: 20px; font-weight: bold;
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div id="student-info">
+    <div class="app-container">
+        <header class="app-header">
+            <img src="https://www.ufpb.br/ufpb/contents/imagens/brasao.png" alt="Logo UFPB">
             <h1>Avaliação de Farmacologia</h1>
+        </header>
+
+        <div id="student-info" class="content-padding">
+            <h2>Bem-vindo(a)!</h2>
             <p>Por favor, preencha seus dados para iniciar a avaliação.</p>
             <form id="student-info-form">
                 <input type="text" id="student-name" placeholder="Digite seu nome completo" required>
@@ -202,22 +191,30 @@
             </form>
         </div>
 
-        <div id="quiz-wrapper">
-             <div id="quiz-header">
+        <div id="quiz-wrapper" class="content-padding">
+             <div id="status-bar">
                 <div id="student-display"></div>
                 <div id="score-tracker">Acertos: 0 / 30</div>
              </div>
-             <div id="timeline-container">
-                 </div>
-             <form id="quiz-form">
-                </form>
-            <button id="submit-btn">Finalizar e Enviar</button>
-            <div id="results" style="display:none;"></div>
+             <div id="timeline-container"></div>
+             <div id="question-container">
+                <p id="question-text"></p>
+                <div class="options" id="options-container"></div>
+             </div>
+             <div id="feedback-area"></div>
+             <div id="navigation">
+                 <button id="prev-btn" class="nav-btn">Anterior</button>
+                 <button id="next-btn" class="nav-btn">Próxima</button>
+             </div>
         </div>
+
+        <div id="results" class="content-padding" style="display:none;"></div>
     </div>
 
     <script>
         const quizData = [
+            // ... (Os 30 objetos de questões que você forneceu, sem alterações) ...
+            // Para economizar espaço, o array não será repetido aqui. O código JS abaixo assume que ele está aqui.
             { question: "1. A hipertensão é definida como:", options: ["PAS ≥ 120 mmHg e PAD ≥ 80 mmHg", "PAS > 140 mmHg e/ou PAD > 90 mmHg", "PAS > 130 mmHg e PAD > 85 mmHg", "PAS ≥ 160 mmHg e PAD ≥ 100 mmHg"], answer: "PAS > 140 mmHg e/ou PAD > 90 mmHg" },
             { question: "2. Qual é a principal alteração fisiológica responsável pela hipertensão?", options: ["Diminuição do volume plasmático", "Aumento da resistência vascular periférica", "Aumento do débito cardíaco", "Redução da contratilidade miocárdica"], answer: "Aumento da resistência vascular periférica" },
             { question: "3. Qual das afirmativas sobre a hipertensão é verdadeira?", options: ["Sempre tem uma causa conhecida", "Acomete apenas idosos", "É fator de risco para insuficiência renal e cardíaca", "Raramente leva a complicação se não tratada"], answer: "É fator de risco para insuficiência renal e cardíaca" },
@@ -248,28 +245,33 @@
             { question: "28. A metildopa é segura para uso em:", options: ["Idosos com insuficiência renal", "Crianças", "Gestantes", "Pacientes com doença hepática"], answer: "Gestantes" },
             { question: "29. A hipertensão secundária pode ser causada por:", options: ["Disfunção tireoidiana", "Uso crônico de estatinas", "Ingestão de potássio", "Exercício físico regular"], answer: "Disfunção tireoidiana" },
             { question: "30. Qual fármaco tem início de ação mais rápido em emergências hipertensivas?", options: ["Enalapril", "Hidralazina IV", "Espironolactona", "Atenolol"], answer: "Hidralazina IV" }
-        ];
 
+        ];
+        
         // Elementos da DOM
         const studentInfoDiv = document.getElementById('student-info');
         const quizWrapperDiv = document.getElementById('quiz-wrapper');
         const startBtn = document.getElementById('start-btn');
         const studentNameInput = document.getElementById('student-name');
         const studentIdInput = document.getElementById('student-id');
-        
-        const quizForm = document.getElementById('quiz-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const resultsContainer = document.getElementById('results');
-        const timelineContainer = document.getElementById('timeline-container');
-        const scoreTracker = document.getElementById('score-tracker');
         const studentDisplay = document.getElementById('student-display');
+        const scoreTracker = document.getElementById('score-tracker');
+        const timelineContainer = document.getElementById('timeline-container');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackArea = document.getElementById('feedback-area');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const resultsContainer = document.getElementById('results');
 
-        const teacherPhoneNumber = '5584994420139'; // Número com código do país
+        const teacherPhoneNumber = '5584994420139';
         let studentName = '';
         let studentId = '';
-        let score = 0;
+        let currentQuestionIndex = 0;
 
-        // Função para iniciar o quiz
+        // Adiciona um campo para armazenar a resposta do usuário
+        quizData.forEach(q => q.userAnswer = null);
+
         startBtn.addEventListener('click', () => {
             studentName = studentNameInput.value.trim();
             studentId = studentIdInput.value.trim();
@@ -284,87 +286,131 @@
             studentDisplay.innerText = studentName;
             
             createTimeline();
-            loadQuiz();
+            renderQuestion(currentQuestionIndex);
         });
 
-        // Função para criar a linha do tempo
         function createTimeline() {
             quizData.forEach((_, index) => {
                 const item = document.createElement('div');
                 item.classList.add('timeline-item');
                 item.id = `timeline-item-${index}`;
-                item.textContent = index + 1;
                 timelineContainer.appendChild(item);
             });
         }
+        
+        function renderQuestion(index) {
+            const question = quizData[index];
+            questionText.innerText = question.question;
+            optionsContainer.innerHTML = '';
+            optionsContainer.className = 'options'; // Reseta a classe
+            feedbackArea.style.display = 'none';
 
-        // Função para carregar as questões na página
-        function loadQuiz() {
-            let quizHTML = '';
-            quizData.forEach((item, index) => {
-                quizHTML += `
-                    <div class="question-block" id="q${index}">
-                        <p>${item.question}</p>
-                        <div class="options">
-                `;
-                item.options.forEach(option => {
-                    quizHTML += `
-                        <label>
-                            <input type="radio" name="question${index}" value="${option}">
-                            <span>${option}</span>
-                        </label>
-                    `;
-                });
-                quizHTML += `</div></div>`;
+            // Atualiza a timeline para destacar a questão atual
+            document.querySelectorAll('.timeline-item').forEach((item, i) => {
+                item.classList.toggle('current', i === index);
             });
-            quizForm.innerHTML = quizHTML;
+            
+            question.options.forEach(option => {
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `question${index}`;
+                input.value = option;
+                input.onchange = () => handleAnswer(index, option, label);
 
-            // Adiciona um 'escutador' de eventos para todas as respostas
-            quizForm.addEventListener('change', (event) => {
-                if (event.target.type === 'radio') {
-                    handleAnswer(event.target);
-                }
+                label.appendChild(input);
+                label.append(option);
+                optionsContainer.appendChild(label);
             });
-        }
-
-        // Função para lidar com a resposta em tempo real
-        function handleAnswer(radioInput) {
-            const questionIndex = parseInt(radioInput.name.replace('question', ''));
-            const selectedValue = radioInput.value;
-            const correctAnswer = quizData[questionIndex].answer;
-            const timelineItem = document.getElementById(`timeline-item-${questionIndex}`);
-
-            timelineItem.classList.remove('correct', 'incorrect'); // Limpa classes anteriores
-
-            if (selectedValue === correctAnswer) {
-                timelineItem.classList.add('correct');
-            } else {
-                timelineItem.classList.add('incorrect');
+            
+            // Se a questão já foi respondida, renderiza no estado "respondido"
+            if (question.userAnswer !== null) {
+                handleAnswer(index, question.userAnswer, null, true);
             }
 
-            updateScore();
+            updateNavigation();
+        }
+
+        function handleAnswer(index, selectedOption, selectedLabel, isReRender = false) {
+            const question = quizData[index];
+            const timelineItem = document.getElementById(`timeline-item-${index}`);
+
+            if (!isReRender) {
+                question.userAnswer = selectedOption;
+                timelineItem.classList.remove('correct', 'incorrect');
+                if (selectedOption === question.answer) {
+                    timelineItem.classList.add('correct');
+                } else {
+                    timelineItem.classList.add('incorrect');
+                }
+                updateScore();
+            }
+
+            // Desabilita todos os inputs e aplica estilos de feedback
+            optionsContainer.classList.add('answered');
+            const allLabels = optionsContainer.querySelectorAll('label');
+            allLabels.forEach(label => {
+                const input = label.querySelector('input');
+                input.disabled = true;
+
+                if (input.value === question.answer) {
+                    label.classList.add('correct-answer');
+                }
+                if (input.value === selectedOption && selectedOption !== question.answer) {
+                    label.classList.add('wrong-answer');
+                }
+            });
+
+            // Mostra o gabarito
+            feedbackArea.style.display = 'block';
+            if (question.userAnswer === question.answer) {
+                feedbackArea.className = 'feedback-area correct';
+                feedbackArea.innerHTML = '<strong>Resposta Correta!</strong>';
+            } else {
+                feedbackArea.className = 'feedback-area incorrect';
+                feedbackArea.innerHTML = `<strong>Resposta Incorreta.</strong> A resposta correta é: <strong>${question.answer}</strong>`;
+            }
         }
         
-        // Função para atualizar o placar
         function updateScore() {
-            const correctAnswers = document.querySelectorAll('.timeline-item.correct').length;
-            score = correctAnswers;
-            scoreTracker.innerText = `Acertos: ${score} / ${quizData.length}`;
+            const correctAnswers = quizData.filter(q => q.userAnswer === q.answer).length;
+            scoreTracker.innerText = `Acertos: ${correctAnswers} / ${quizData.length}`;
+        }
+        
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = 'Finalizar Avaliação';
+            } else {
+                nextBtn.innerText = 'Próxima';
+            }
         }
 
-        // Função para finalizar e enviar
-        submitBtn.addEventListener('click', () => {
-            const totalQuestions = quizData.length;
-            const answeredQuestions = document.querySelectorAll('.timeline-item.correct, .timeline-item.incorrect').length;
-            
-            if (answeredQuestions < totalQuestions) {
-                if (!confirm(`Você ainda não respondeu ${totalQuestions - answeredQuestions} questão(ões). Deseja finalizar mesmo assim?`)) {
-                    return;
-                }
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion(currentQuestionIndex);
             }
-            
-            // Exibir resultados
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion(currentQuestionIndex);
+            } else {
+                // Finaliza o quiz
+                finishQuiz();
+            }
+        });
+        
+        function finishQuiz() {
+            const score = quizData.filter(q => q.userAnswer === q.answer).length;
+            const totalQuestions = quizData.length;
             const percentage = ((score / totalQuestions) * 100).toFixed(1);
+
+            quizWrapperDiv.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
             resultsContainer.innerHTML = `
                 <h2>Avaliação Finalizada!</h2>
                 <p>Aluno(a): <strong>${studentName}</strong></p>
@@ -373,21 +419,12 @@
                 <p>Sua pontuação final é <strong>${percentage}%</strong>.</p>
                 <a id="whatsapp-btn" href="#" target="_blank">Enviar Resultado para o Professor</a>
             `;
-            resultsContainer.style.display = 'block';
-            submitBtn.style.display = 'none'; // Esconde o botão de finalizar
 
-            // Gerar link do WhatsApp
             const message = `*Avaliação de Farmacologia Concluída*\n\n*Aluno(a):* ${studentName}\n*Matrícula:* ${studentId}\n*Acertos:* ${score} de ${totalQuestions}\n*Pontuação:* ${percentage}%`;
             const whatsappURL = `https://api.whatsapp.com/send?phone=${teacherPhoneNumber}&text=${encodeURIComponent(message)}`;
-            
-            const whatsappBtn = document.getElementById('whatsapp-btn');
-            whatsappBtn.href = whatsappURL;
-
-            // Rolar para os resultados
-            resultsContainer.scrollIntoView({ behavior: 'smooth' });
-        });
+            document.getElementById('whatsapp-btn').href = whatsappURL;
+        }
 
     </script>
-
 </body>
 </html>

@@ -6,194 +6,271 @@
     <title>Avaliação de Farmacologia</title>
     <style>
         :root {
-            /* Paleta de Cores do WhatsApp */
-            --primary-color: #075E54;      /* Verde Escuro (Header) */
-            --secondary-color: #25D366;    /* Verde Brilhante (Botões) */
-            --light-primary: #DCF8C6;      /* Verde Claro (Chat Bubble/Hover) */
-            
+            /* Paleta de Cores Refinada */
+            --primary-bg: #e0e5ec;          /* Fundo principal do Neumorphism */
+            --light-shadow: #ffffff;        /* Sombra clara para efeito 3D */
+            --dark-shadow: #a3b1c6;         /* Sombra escura para efeito 3D */
+            --text-color: #3f51b5;          /* Azul escuro para textos principais */
+            --secondary-text: #616161;      /* Cinza para textos secundários */
+
             /* Cores Funcionais */
-            --correct-color: #2e7d32;
-            --incorrect-color: #c62828;
-            --neutral-color: #e0e0e0;
-            --background-color: #f0f2f5;
+            --action-btn-color: #4CAF50;    /* Verde para botões de ação */
+            --action-btn-hover: #43A047;    /* Verde mais escuro ao hover */
+            --correct-color: #2e7d32;       /* Verde para acertos */
+            --incorrect-color: #c62828;     /* Vermelho para erros */
+            --neutral-color: #bdbdbd;       /* Cinza para elementos neutros */
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: var(--background-color);
-            color: #333;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--secondary-text);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px 0;
+            overflow-x: hidden; /* Evita scroll horizontal */
         }
+
         .app-container {
             width: 100%;
             max-width: 800px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background-color: var(--primary-bg);
+            border-radius: 20px;
+            box-shadow: 10px 10px 20px var(--dark-shadow),
+                        -10px -10px 20px var(--light-shadow);
             overflow: hidden;
+            transition: all 0.3s ease-in-out;
         }
 
         /* Cabeçalho */
         .app-header {
-            background-color: var(--primary-color);
+            background-color: var(--text-color); /* Azul mais profissional */
             color: white;
-            padding: 15px 25px;
+            padding: 20px 30px;
             display: flex;
             align-items: center;
             gap: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        .app-header img {
-            height: 40px;
-            filter: invert(1);
+        .app-header .icon {
+            font-size: 2.2em; /* Tamanho maior para o ícone */
+            line-height: 1; /* Alinha o texto verticalmente com o ícone */
         }
         .app-header h1 {
             margin: 0;
-            font-size: 1.5em;
+            font-size: 1.8em;
+            font-weight: 600;
         }
         
         .content-padding {
             padding: 30px;
         }
 
+        /* Campos de Input Neumorphism */
+        input[type="text"] {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary-bg);
+            box-shadow: inset 2px 2px 5px var(--dark-shadow),
+                        inset -5px -5px 10px var(--light-shadow);
+            font-size: 1em;
+            color: var(--secondary-text);
+            transition: all 0.2s ease-in-out;
+            outline: none; /* Remove a borda de foco padrão */
+            width: calc(100% - 40px); /* Ajusta a largura para padding */
+        }
+        input[type="text"]:focus {
+            box-shadow: inset 1px 1px 2px var(--dark-shadow),
+                        inset -1px -1px 2px var(--light-shadow);
+        }
+
+        /* Botão 3D (Neumorphism) */
+        .neumorphic-button {
+            padding: 15px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            background-color: var(--action-btn-color);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 5px 5px 10px var(--dark-shadow),
+                        -5px -5px 10px var(--light-shadow);
+            outline: none;
+            display: block; /* Para ocupar a largura total, se estiver sozinho */
+            width: 100%;
+            box-sizing: border-box; /* Inclui padding e borda na largura total */
+        }
+        .neumorphic-button:hover {
+            background-color: var(--action-btn-hover);
+            box-shadow: 2px 2px 5px var(--dark-shadow),
+                        -2px -2px 5px var(--light-shadow);
+        }
+        .neumorphic-button:active {
+            box-shadow: inset 2px 2px 5px var(--dark-shadow),
+                        inset -5px -5px 10px var(--light-shadow);
+            background-color: var(--action-btn-hover);
+        }
+        .neumorphic-button:disabled {
+            background-color: var(--neutral-color);
+            color: #888;
+            box-shadow: inset 2px 2px 5px var(--dark-shadow),
+                        inset -5px -5px 10px var(--light-shadow);
+            cursor: not-allowed;
+        }
+
+
         /* Tela de Informações do Aluno */
         #student-info-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
-        #student-info-form input {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        #start-btn {
-            padding: 15px;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #fff;
-            background-color: var(--secondary-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #start-btn:hover {
-            opacity: 0.9;
-        }
-
+        
         /* Tela do Quiz */
         #quiz-wrapper {
             display: none;
         }
 
         #status-bar {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(163, 177, 198, 0.3); /* Linha divisória sutil */
         }
         #student-display, #score-tracker {
-            background-color: #f4f4f9;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 500;
+            background-color: var(--primary-bg);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 3px 3px 6px var(--dark-shadow),
+                        -3px -3px 6px var(--light-shadow);
+            color: var(--text-color);
         }
 
         #timeline-container {
-            display: flex; flex-wrap: wrap; gap: 5px;
-            margin-bottom: 25px; justify-content: center;
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-bottom: 30px; justify-content: center;
         }
         .timeline-item {
-            width: 22px; height: 8px;
+            width: 25px; height: 10px;
             background-color: var(--neutral-color);
-            border-radius: 4px; transition: background-color 0.3s;
+            border-radius: 5px; transition: all 0.3s ease-in-out;
+            box-shadow: inset 2px 2px 4px var(--dark-shadow),
+                        inset -2px -2px 4px var(--light-shadow);
         }
         .timeline-item.correct { background-color: var(--correct-color); }
         .timeline-item.incorrect { background-color: var(--incorrect-color); }
         .timeline-item.current {
-            transform: scale(1.3);
-            box-shadow: 0 0 8px rgba(37, 211, 102, 0.5);
+            background-color: var(--text-color);
+            box-shadow: 3px 3px 6px var(--dark-shadow),
+                        -3px -3px 6px var(--light-shadow);
+            transform: scale(1.1);
         }
 
-        #question-container { min-height: 250px; }
+        #question-container { min-height: 280px; margin-bottom: 20px; }
         #question-text {
-            font-size: 1.2em; font-weight: bold;
-            margin-bottom: 20px; color: var(--primary-color);
+            font-size: 1.3em; font-weight: 700;
+            margin-bottom: 25px; color: var(--text-color);
         }
+        
         .options label {
-            display: block; background-color: #f9f9f9;
-            padding: 12px 15px; margin-bottom: 10px;
-            border-radius: 8px; cursor: pointer;
-            transition: all 0.2s; border: 1px solid #ddd;
+            display: block;
+            background-color: var(--primary-bg);
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 3px 3px 6px var(--dark-shadow),
+                        -3px -3px 6px var(--light-shadow);
+            color: var(--secondary-text);
+            font-weight: 500;
+            position: relative; /* Para o ícone de checked */
         }
-        .options label:hover { background-color: var(--light-primary); }
+        .options label:hover {
+            box-shadow: 1px 1px 2px var(--dark-shadow),
+                        -1px -1px 2px var(--light-shadow);
+        }
         .options input[type="radio"] { display: none; }
         
         /* Estilos de Resposta */
-        .options.answered label { cursor: not-allowed; opacity: 0.7; }
-        .options.answered label:hover { background-color: #f9f9f9; }
+        .options.answered label { cursor: not-allowed; opacity: 0.8; }
+        .options.answered label:hover {
+            box-shadow: 3px 3px 6px var(--dark-shadow),
+                        -3px -3px 6px var(--light-shadow); /* Reverte para o estado original */
+        }
         .options.answered label.correct-answer {
-            background-color: #e8f5e9; border-color: var(--correct-color);
+            background-color: #e8f5e9; /* Verde claro */
+            box-shadow: inset 2px 2px 5px rgba(46, 125, 50, 0.3),
+                        inset -5px -5px 10px rgba(255, 255, 255, 0.8);
             color: var(--correct-color); font-weight: bold; opacity: 1;
         }
         .options.answered label.wrong-answer {
-            background-color: #ffebee; border-color: var(--incorrect-color);
+            background-color: #ffebee; /* Vermelho claro */
+            box-shadow: inset 2px 2px 5px rgba(198, 40, 40, 0.3),
+                        inset -5px -5px 10px rgba(255, 255, 255, 0.8);
             color: var(--incorrect-color); font-weight: bold; opacity: 1;
         }
 
         #feedback-area {
-            margin-top: 20px; padding: 15px; border-radius: 8px;
-            font-weight: 500; display: none;
+            margin-top: 25px; padding: 20px; border-radius: 15px;
+            font-weight: 600; display: none;
+            box-shadow: inset 2px 2px 5px var(--dark-shadow),
+                        inset -5px -5px 10px var(--light-shadow);
         }
         #feedback-area.correct { background-color: #e8f5e9; color: var(--correct-color); }
         #feedback-area.incorrect { background-color: #ffebee; color: var(--incorrect-color); }
 
         #navigation {
-            margin-top: 30px; border-top: 1px solid #eee;
-            padding-top: 20px; display: flex; justify-content: space-between;
+            margin-top: 30px; border-top: 1px solid rgba(163, 177, 198, 0.3);
+            padding-top: 25px; display: flex; justify-content: space-between;
+            gap: 15px; /* Espaço entre os botões */
         }
         .nav-btn {
-            padding: 12px 25px; font-size: 1em; font-weight: bold;
-            color: #fff; background-color: var(--secondary-color);
-            border: none; border-radius: 5px; cursor: pointer;
-            transition: background-color 0.2s;
+            flex: 1; /* Faz os botões ocuparem espaço igual */
         }
-        .nav-btn:hover { opacity: 0.9; }
-        .nav-btn:disabled { background-color: #ccc; cursor: not-allowed; opacity: 1;}
 
         /* Tela Final */
         #results {
             text-align: center;
         }
          #whatsapp-btn {
-            display: inline-block; padding: 12px 25px; font-size: 1.1em;
-            color: #fff; background-color: var(--secondary-color); border-radius: 25px;
-            text-decoration: none; margin-top: 20px; font-weight: bold;
-        }
+            background-color: #25D366; /* Verde do WhatsApp para o botão final */
+            box-shadow: 5px 5px 10px rgba(37, 211, 102, 0.4),
+                        -5px -5px 10px var(--light-shadow);
+         }
+         #whatsapp-btn:hover { background-color: #128C7E; } /* Tom mais escuro do WhatsApp */
     </style>
 </head>
 <body>
     <div class="app-container">
         <header class="app-header">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHdpZHRoPSIxOHB4IiBoZWlnaHQ9IjE4cHgiPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMjAgMkg0Yy0xLjEgMC0yIC45LTIgMnYxOGwyLTJINDIwYzEuMSAwIDItLjkgMi0yVjRjMC0xLjEtLjktMi0yLTJ6bS0yIDEySDZ2LTJoMTJ2MnptMC0zSDZ2LTJoMTJ2MnptMC0zSDZWNmgxMnYyeiIvPjwvc3ZnPg==" alt="Ícone de Chat">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l2-2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 14h12v-2H6v2zm0-3h12V9H6v2zm0-3h12V6H6v2z"/>
+                </svg>
+            </span>
             <h1>Avaliação de Farmacologia</h1>
         </header>
 
         <div id="student-info" class="content-padding">
-            <h2>Bem-vindo(a)!</h2>
-            <p>Por favor, preencha seus dados para iniciar a avaliação.</p>
+            <h2 style="color: var(--text-color);">Bem-vindo(a)!</h2>
+            <p style="margin-bottom: 25px;">Por favor, preencha seus dados para iniciar a avaliação.</p>
             <form id="student-info-form">
-                <input type="text" id="student-name" placeholder="Digite seu nome completo" required>
-                <input type="text" id="student-id" placeholder="Digite sua matrícula" required>
-                <button type="button" id="start-btn">Iniciar Avaliação</button>
+                <input type="text" id="student-name" placeholder="Nome Completo" required>
+                <input type="text" id="student-id" placeholder="Matrícula" required>
+                <button type="button" id="start-btn" class="neumorphic-button">Iniciar Avaliação</button>
             </form>
         </div>
 
@@ -209,8 +286,8 @@
              </div>
              <div id="feedback-area"></div>
              <div id="navigation">
-                 <button id="prev-btn" class="nav-btn">Anterior</button>
-                 <button id="next-btn" class="nav-btn">Próxima</button>
+                 <button id="prev-btn" class="neumorphic-button nav-btn">Anterior</button>
+                 <button id="next-btn" class="neumorphic-button nav-btn">Próxima</button>
              </div>
         </div>
 
@@ -252,7 +329,7 @@
             { question: "30. Qual fármaco tem início de ação mais rápido em emergências hipertensivas?", options: ["Enalapril", "Hidralazina IV", "Espironolactona", "Atenolol"], answer: "Hidralazina IV" }
         ];
         
-        // O restante do código JavaScript permanece exatamente o mesmo
+        // O restante do código JavaScript permanece praticamente o mesmo
         // Elementos da DOM
         const studentInfoDiv = document.getElementById('student-info');
         const quizWrapperDiv = document.getElementById('quiz-wrapper');
@@ -295,6 +372,7 @@
         });
 
         function createTimeline() {
+            timelineContainer.innerHTML = ''; // Limpa antes de criar
             quizData.forEach((_, index) => {
                 const item = document.createElement('div');
                 item.classList.add('timeline-item');
@@ -422,7 +500,7 @@
                 <p>Matrícula: <strong>${studentId}</strong></p>
                 <p>Você acertou <strong>${score}</strong> de <strong>${totalQuestions}</strong> questões.</p>
                 <p>Sua pontuação final é <strong>${percentage}%</strong>.</p>
-                <a id="whatsapp-btn" href="#" target="_blank">Enviar Resultado para o Professor</a>
+                <a id="whatsapp-btn" href="#" target="_blank" class="neumorphic-button">Enviar Resultado para o Professor</a>
             `;
 
             const message = `*Avaliação de Farmacologia Concluída*\n\n*Aluno(a):* ${studentName}\n*Matrícula:* ${studentId}\n*Acertos:* ${score} de ${totalQuestions}\n*Pontuação:* ${percentage}%`;

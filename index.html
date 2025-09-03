@@ -6,9 +6,12 @@
     <title>Avaliação de Farmacologia</title>
     <style>
         :root {
-            --primary-color: #4a148c;
-            --light-primary: #e9e3f5;
-            --secondary-color: #673ab7;
+            /* Paleta de Cores do WhatsApp */
+            --primary-color: #075E54;      /* Verde Escuro (Header) */
+            --secondary-color: #25D366;    /* Verde Brilhante (Botões) */
+            --light-primary: #DCF8C6;      /* Verde Claro (Chat Bubble/Hover) */
+            
+            /* Cores Funcionais */
             --correct-color: #2e7d32;
             --incorrect-color: #c62828;
             --neutral-color: #e0e0e0;
@@ -46,6 +49,7 @@
         }
         .app-header img {
             height: 40px;
+            filter: invert(1);
         }
         .app-header h1 {
             margin: 0;
@@ -116,7 +120,7 @@
         .timeline-item.incorrect { background-color: var(--incorrect-color); }
         .timeline-item.current {
             transform: scale(1.3);
-            box-shadow: 0 0 8px rgba(74, 20, 140, 0.5);
+            box-shadow: 0 0 8px rgba(37, 211, 102, 0.5);
         }
 
         #question-container { min-height: 250px; }
@@ -160,8 +164,10 @@
             padding: 12px 25px; font-size: 1em; font-weight: bold;
             color: #fff; background-color: var(--secondary-color);
             border: none; border-radius: 5px; cursor: pointer;
+            transition: background-color 0.2s;
         }
-        .nav-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+        .nav-btn:hover { opacity: 0.9; }
+        .nav-btn:disabled { background-color: #ccc; cursor: not-allowed; opacity: 1;}
 
         /* Tela Final */
         #results {
@@ -169,7 +175,7 @@
         }
          #whatsapp-btn {
             display: inline-block; padding: 12px 25px; font-size: 1.1em;
-            color: #fff; background-color: #25D366; border-radius: 25px;
+            color: #fff; background-color: var(--secondary-color); border-radius: 25px;
             text-decoration: none; margin-top: 20px; font-weight: bold;
         }
     </style>
@@ -177,7 +183,7 @@
 <body>
     <div class="app-container">
         <header class="app-header">
-            <img src="https://www.ufpb.br/ufpb/contents/imagens/brasao.png" alt="Logo UFPB">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHdpZHRoPSIxOHB4IiBoZWlnaHQ9IjE4cHgiPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMjAgMkg0Yy0xLjEgMC0yIC45LTIgMnYxOGwyLTJINDIwYzEuMSAwIDItLjkgMi0yVjRjMC0xLjEtLjktMi0yLTJ6bS0yIDEySDZ2LTJoMTJ2MnptMC0zSDZ2LTJoMTJ2MnptMC0zSDZWNmgxMnYyeiIvPjwvc3ZnPg==" alt="Ícone de Chat">
             <h1>Avaliação de Farmacologia</h1>
         </header>
 
@@ -213,8 +219,7 @@
 
     <script>
         const quizData = [
-            // ... (Os 30 objetos de questões que você forneceu, sem alterações) ...
-            // Para economizar espaço, o array não será repetido aqui. O código JS abaixo assume que ele está aqui.
+            // ... (O array com as 30 questões permanece aqui, inalterado) ...
             { question: "1. A hipertensão é definida como:", options: ["PAS ≥ 120 mmHg e PAD ≥ 80 mmHg", "PAS > 140 mmHg e/ou PAD > 90 mmHg", "PAS > 130 mmHg e PAD > 85 mmHg", "PAS ≥ 160 mmHg e PAD ≥ 100 mmHg"], answer: "PAS > 140 mmHg e/ou PAD > 90 mmHg" },
             { question: "2. Qual é a principal alteração fisiológica responsável pela hipertensão?", options: ["Diminuição do volume plasmático", "Aumento da resistência vascular periférica", "Aumento do débito cardíaco", "Redução da contratilidade miocárdica"], answer: "Aumento da resistência vascular periférica" },
             { question: "3. Qual das afirmativas sobre a hipertensão é verdadeira?", options: ["Sempre tem uma causa conhecida", "Acomete apenas idosos", "É fator de risco para insuficiência renal e cardíaca", "Raramente leva a complicação se não tratada"], answer: "É fator de risco para insuficiência renal e cardíaca" },
@@ -245,9 +250,9 @@
             { question: "28. A metildopa é segura para uso em:", options: ["Idosos com insuficiência renal", "Crianças", "Gestantes", "Pacientes com doença hepática"], answer: "Gestantes" },
             { question: "29. A hipertensão secundária pode ser causada por:", options: ["Disfunção tireoidiana", "Uso crônico de estatinas", "Ingestão de potássio", "Exercício físico regular"], answer: "Disfunção tireoidiana" },
             { question: "30. Qual fármaco tem início de ação mais rápido em emergências hipertensivas?", options: ["Enalapril", "Hidralazina IV", "Espironolactona", "Atenolol"], answer: "Hidralazina IV" }
-
         ];
         
+        // O restante do código JavaScript permanece exatamente o mesmo
         // Elementos da DOM
         const studentInfoDiv = document.getElementById('student-info');
         const quizWrapperDiv = document.getElementById('quiz-wrapper');
